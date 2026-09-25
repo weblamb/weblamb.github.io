@@ -108,22 +108,23 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Hello
-      <span class="entry-hint" title="Draft">
-        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" fill="currentColor">
-          <path
-            d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
-        </svg>
-      </span>
+    <h2 class="entry-hint-parent">Hugo 与 GitHub Pages 部署笔记
     </h2>
   </header>
   <div class="entry-content">
-    <p></p>
+    <p>本站使用 Hugo 生成静态页面、PaperMod 主题展示文章，代码放在 GitHub 仓库 weblamb/weblamb.github.io。每次推送到 main 分支，GitHub Actions 都会重新构建并部署网站。
+本站文件放在哪里 hugo.yaml：站点地址、标题和主题等配置；当前站点地址是 https://weblamb.github.io/。 content/posts/：文章目录，一篇文章对应一个 Markdown 文件。 .github/workflows/hugo.yml：GitHub Pages 的构建和部署流程。 public/：Hugo 构建出的静态文件目录，由 Actions 上传到 Pages。 写一篇新文章 进入项目目录，使用 Hugo 创建文章：
+hugo new content posts/my-post.md 打开 content/posts/my-post.md，填写标题并在前置信息下方写正文。例如：
+--- title: &#39;我的新文章&#39; date: &#39;2026-09-25T17:34:58&#43;08:00&#39; draft: true --- 这里是文章正文。 draft: true 表示草稿。写作期间可以保留它，准备发布时改成 draft: false。日期也要留意：未来的 date 或 publishDate、已经过去的 expiryDate，都会影响正常构建时文章是否出现。
+本地预览与发布前检查 hugo server -D 按终端提示打开本地地址。-D 会把草稿也显示出来，所以本地能看到，不代表正式网站会发布。
+准备发布时，先把文章的 draft 改成 false，再用接近部署环境的方式检查：
+hugo server hugo build 不带 -D 的预览和构建只显示符合发布条件的文章。hugo build 默认把生成结果写入 public/。如果之前用 hugo build -D 构建过，旧文件可能留在 public/；检查产物时可以使用 hugo build --cleanDestinationDir 清理不再生成的文件。
+...</p>
   </div>
   <footer class="entry-footer">
 
 <span title='2026-09-25 17:34:58 +0800 CST'>September 25, 2026</span></footer>
-  <a class="entry-link" aria-label="post link to Hello" href="http://localhost:1313/posts/hello/"></a>
+  <a class="entry-link" aria-label="post link to Hugo 与 GitHub Pages 部署笔记" href="http://localhost:1313/posts/hugodeploy/"></a>
 </article>
     </main>
     

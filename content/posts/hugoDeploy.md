@@ -1,0 +1,80 @@
+---
+date: '2026-09-25T17:34:58+08:00'
+draft: false
+title: 'Hugo 与 GitHub Pages 部署笔记'
+description: '记录本站从本地写作、预览，到推送 GitHub 并由 Actions 部署的完整流程。'
+---
+
+本站使用 Hugo 生成静态页面、PaperMod 主题展示文章，代码放在 GitHub 仓库 `weblamb/weblamb.github.io`。每次推送到 `main` 分支，GitHub Actions 都会重新构建并部署网站。
+
+## 本站文件放在哪里
+
+- `hugo.yaml`：站点地址、标题和主题等配置；当前站点地址是 `https://weblamb.github.io/`。
+- `content/posts/`：文章目录，一篇文章对应一个 Markdown 文件。
+- `.github/workflows/hugo.yml`：GitHub Pages 的构建和部署流程。
+- `public/`：Hugo 构建出的静态文件目录，由 Actions 上传到 Pages。
+
+## 写一篇新文章
+
+进入项目目录，使用 Hugo 创建文章：
+
+```bash
+hugo new content posts/my-post.md
+```
+
+打开 `content/posts/my-post.md`，填写标题并在前置信息下方写正文。例如：
+
+```markdown
+---
+title: '我的新文章'
+date: '2026-09-25T17:34:58+08:00'
+draft: true
+---
+
+这里是文章正文。
+```
+
+`draft: true` 表示草稿。写作期间可以保留它，准备发布时改成 `draft: false`。日期也要留意：未来的 `date` 或 `publishDate`、已经过去的 `expiryDate`，都会影响正常构建时文章是否出现。
+
+## 本地预览与发布前检查
+
+```bash
+hugo server -D
+```
+
+按终端提示打开本地地址。`-D` 会把草稿也显示出来，所以**本地能看到，不代表正式网站会发布**。
+
+准备发布时，先把文章的 `draft` 改成 `false`，再用接近部署环境的方式检查：
+
+```bash
+hugo server
+hugo build
+```
+
+不带 `-D` 的预览和构建只显示符合发布条件的文章。`hugo build` 默认把生成结果写入 `public/`。如果之前用 `hugo build -D` 构建过，旧文件可能留在 `public/`；检查产物时可以使用 `hugo build --cleanDestinationDir` 清理不再生成的文件。
+
+## 推送到 GitHub 并部署
+
+确认文章可以正常构建后，提交并推送源文件：
+
+```bash
+git add content/posts/my-post.md
+git commit -m "Publish my post"
+git push origin main
+```
+
+本站的 workflow 监听 `main` 分支推送，也支持在 GitHub 的 **Actions** 页面手动运行。它会检出代码、安装所需工具、运行 `hugo build`，把 `public/` 上传为 Pages 产物，最后执行部署。通常只需推送 Markdown 源文件和配置文件，不需要手动推送 `public/`。
+
+首次部署时，在 GitHub 仓库的 **Settings → Pages** 中确认发布来源为 **GitHub Actions**。推送后到 **Actions** 查看 “Build and deploy” 的执行结果；部署完成后打开 [本站](https://weblamb.github.io/) 检查文章。
+
+## 这次文章没有显示的原因
+
+这篇文章原来只有前置信息，既没有正文，`draft` 也设成了 `true`。因此 `hugo server -D` 能显示文章入口，而 workflow 使用的 `hugo build` 会跳过草稿；即使显示入口，原文件也没有正文可展示。现在已经补上正文并把 `draft` 改为 `false`。
+
+以后遇到“本地有、线上没有”，可依次检查：文章的 `draft` 和日期、是否已经推送到 `main`、Actions 是否成功、Pages 发布来源是否为 GitHub Actions，以及 `hugo.yaml` 的 `baseURL` 是否指向正确站点。
+
+## 参考文档
+
+- [Hugo 基本用法](https://gohugo.io/getting-started/usage/)
+- [Hugo 快速开始](https://gohugo.io/getting-started/quick-start/)
+- [GitHub Pages 自定义 workflow](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
