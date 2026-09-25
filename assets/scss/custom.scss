@@ -1,0 +1,8 @@
+/* Keep the footer near the viewport bottom on short pages. */
+main.main {
+    align-self: stretch;
+}
+
+main.main > footer.site-footer {
+    margin-top: auto;
+}

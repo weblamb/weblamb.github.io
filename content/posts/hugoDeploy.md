@@ -1,11 +1,17 @@
 ---
+categories:
+  - 技术笔记
+tags:
+  - Hugo
+  - GitHub Pages
+  - 部署
 date: '2026-09-25T17:34:58+08:00'
 draft: false
 title: 'Hugo 与 GitHub Pages 部署笔记'
 description: '记录本站从本地写作、预览，到推送 GitHub 并由 Actions 部署的完整流程。'
 ---
 
-本站使用 Hugo 生成静态页面、PaperMod 主题展示文章，代码放在 GitHub 仓库 `weblamb/weblamb.github.io`。每次推送到 `main` 分支，GitHub Actions 都会重新构建并部署网站。
+本站使用 Hugo 生成静态页面、Stack 主题展示文章，代码放在 GitHub 仓库 `weblamb/weblamb.github.io`。每次推送到 `main` 分支，GitHub Actions 都会重新构建并部署网站。
 
 ## 本站文件放在哪里
 
